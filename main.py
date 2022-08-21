@@ -1,9 +1,14 @@
 from typing import Optional, Union
-from fastapi import FastAPI, status, Response
+from fastapi import FastAPI, status, Response, Request
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from starlette.responses import HTMLResponse
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = ["*"]
 
@@ -14,6 +19,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+templates = Jinja2Templates(directory="templates")
 
 # Create Your Response Object
 class MatchDataObj(BaseModel):
@@ -27,3 +35,9 @@ async def getMatchesData(*, name: Optional[str] = None,  tagline: Optional[str] 
     response.status_code = status.HTTP_200_OK
     # Return Data in JSON Formate From Here
     return item
+
+
+
+@app.get("/", response_class=HTMLResponse)
+async def read_item(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
