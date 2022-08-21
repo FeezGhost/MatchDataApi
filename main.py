@@ -6,10 +6,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
+# app intialization
 app = FastAPI()
 
+# template configuration
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+templates = Jinja2Templates(directory="templates")
+
+# cors origin configuration
 origins = ["*"]
 
 app.add_middleware(
@@ -21,7 +26,6 @@ app.add_middleware(
 )
 
 
-templates = Jinja2Templates(directory="templates")
 
 # Create Your Response Object
 class MatchDataObj(BaseModel):
@@ -37,7 +41,7 @@ async def getMatchesData(*, name: Optional[str] = None,  tagline: Optional[str] 
     return item
 
 
-
+# html view
 @app.get("/", response_class=HTMLResponse)
 async def read_item(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
