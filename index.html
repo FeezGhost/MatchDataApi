@@ -26,24 +26,23 @@
         <button onclick="getData()" class="btn btn-lg btn-outline-primary w-100">Get Data</button>
     </div>
 
-    <div id="content">
+    <div id="content" class="container mt-5">
 
     </div>
 
 
     <script>
-        function getData(){
+        async function getData(){
             var name = document.getElementById("id_name");
             var tagline = document.getElementById("id_tagline");
             var end_point = "https://live-match-data-backend.herokuapp.com/matches-data";
             var query_parem = end_point + "?name="+name.value+"&tagline="+tagline.value;
-            var result = fetch(query_parem).then(data => {
-                return data.json();
-                })
-                .then(post => {
-                console.log(post.title);
-                });
-            console.log(result);
+            var result = await fetch(query_parem)
+            .then((response) => response.json())
+            .then((data) => data);
+            var name = result.name;
+            
+            document.getElementById('content').innerHTML = "<h1> Name : "+ result.Name + "</h1> <h1>Tagline : " + result.Name+"</h1>";
         }
     </script>
     <!-- Optional JavaScript -->
