@@ -1,3 +1,4 @@
+import json
 from typing import Optional, Union
 from fastapi import FastAPI, status, Response, Request
 from pydantic import BaseModel
@@ -35,9 +36,14 @@ class MatchDataObj(BaseModel):
 @app.get("/matches-data", response_model = MatchDataObj)
 async def getMatchesData(*, name: Optional[str] = None,  tagline: Optional[str] = None, response : Response):
     # Call Your File And Get Data From It Here 
+    # res = YourMethodName()
+    # comment below  lines
     item : MatchDataObj = MatchDataObj(Name = name, Tagline = tagline)
     response.status_code = status.HTTP_200_OK
     # Return Data in JSON Formate From Here
+    # uncomment below line
+    # return json.dump(res)
+    # comment below line
     return item
 
 
